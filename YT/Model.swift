@@ -7,8 +7,14 @@
 
 import Foundation
 
+protocol ModelDelegate {
+    func videosFetched(videos:[Video])
+}
+
 
 struct Model {
+    
+    var delegate:ModelDelegate?
     
     func getVideo()  {
       // Create a URL object
@@ -34,7 +40,14 @@ struct Model {
                 
                 let response = try decoder.decode(Response.self, from: data!)
                 
-               dump(response)
+                // Cell the "videosReturned" method of the delegate
+                if response.items != nil{
+                    self.delegate?.videosFetched(videos: response.items!)
+                    
+                }
+                
+                
+                dump(response)
             }catch{
                 // Error
                 
